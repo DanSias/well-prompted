@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",                   // Output compiled files to the `dist` folder
+    "rootDir": "./src",                   // Treat `src` as the root directory for TypeScript files
+    "typeRoots": ["./node_modules/@types"] // Include type definitions from `node_modules`
+  },
+  "include": ["src"],                     // Include all files inside the `src` folder
+  "exclude": ["node_modules", "dist"]     // Exclude build artifacts and dependencies
+}

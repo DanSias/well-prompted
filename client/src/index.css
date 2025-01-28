@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+}
+
+h1,
+h2,
+h3,
+p,
+li,
+td {
+  @apply text-gray-800 dark:text-gray-300;
+}
+
+table {
+  @apply border-collapse border border-gray-300 dark:border-gray-700;
+}
+
+th,
+td {
+  @apply border border-gray-300 dark:border-gray-700 px-4 py-2;
+}
+
+th {
+  @apply bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100;
+}
+
+td {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.card {
+  @apply bg-gray-100 dark:bg-gray-700;
+}

@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(uuid()) @db.Uuid
+  email             String    @unique
+  passwordHash      String
+  name              String?
+  role              Role      @default(USER) // Role-based access control
+  isActive          Boolean   @default(true) // Account status
+  profilePicture    String? // Optional profile picture URL
+  lastLogin         DateTime? // Tracks the last login timestamp
+  emailVerified     Boolean   @default(false) // Email verification status
+  verificationToken String? // Token for email verification and password resets
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt // Automatically updates on change
+  projects          Project[] @relation("UserProjects")
+}
+
+model Project {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String // Name of the project
+  description String? // Optional description of the project
+  userId      String   @db.Uuid // Foreign key must match the type of User.id
+  user        User     @relation(fields: [userId], references: [id], name: "UserProjects")
+  language    String // Primary language used in the project (e.g., TypeScript, JavaScript)
+  frontend    String? // Frontend technology (e.g., React.js, Vue.js)
+  backend     String? // Backend technology (e.g., Node.js, Django)
+  database    String? // Database technology (e.g., Prisma, PostgreSQL)
+  styling     String? // Styling framework (e.g., Tailwind, Bootstrap)
+  createdAt   DateTime @default(now()) // Timestamp for when the project was created
+  updatedAt   DateTime @updatedAt // Automatically updates on change
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+}
