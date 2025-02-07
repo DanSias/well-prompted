@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 
-const promptTypes = [
-  { name: "Code Generation", path: "/prompts/code-generation" },
-  { name: "Debugging & Error Resolution", path: "/prompts/debugging" },
-  { name: "Code Refactoring", path: "/prompts/refactoring" },
-  { name: "Learning & Research", path: "/prompts/learning" },
-  { name: "Automation & Testing", path: "/prompts/automation" },
-  { name: "Build Custom Prompt", path: "/prompts/custom" },
-];
+import promptTypes from "@/constants/promptTypes";
 
 export default function HomePage() {
   return (
