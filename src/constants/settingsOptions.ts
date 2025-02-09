@@ -1,3 +1,27 @@
+/**
+ * /src/constants/settingsOptions.ts
+ *
+ * This file defines static options for various user preferences, including
+ * programming languages, frameworks, testing tools, and learning styles.
+ * These options are used to populate select dropdowns in user settings and
+ * form fields across the app.
+ *
+ * Usage:
+ * - Used in /app/prompts/[slug]/page.tsx to provide predefined options for form inputs.
+ * - Auto-fills form fields based on saved user settings from localStorage.
+ */
+
+export const codeTypeOptions = [
+  { value: "function", label: "Function" },
+  { value: "component", label: "Component" },
+  { value: "class", label: "Class" },
+  { value: "API endpoint", label: "API Endpoint" },
+  { value: "hook", label: "Hook" },
+  { value: "utility", label: "Utility Module" },
+  { value: "test", label: "Test Case" },
+  { value: "database_model", label: "Database Model" },
+];
+
 export const languageOptions = [
   { value: "JavaScript", label: "JavaScript" },
   { value: "TypeScript", label: "TypeScript" },
