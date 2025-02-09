@@ -1,49 +1,64 @@
-"use client";
+/**
+ * PromptForm.tsx
+ *
+ * This component renders the dynamic form fields based on the prompt type.
+ * It handles user input and passes data back to the main PromptPage component.
+ *
+ * Features:
+ * - Dynamically renders text inputs, textareas, and select dropdowns based on form configuration.
+ * - Supports CreatableSelect for flexible user input with predefined options.
+ * - Includes a reset button to clear all form inputs.
+ *
+ * Props:
+ * - formElements: Array of form elements to render.
+ * - formData: Current state of the form inputs.
+ * - handleChange: Function to update form data in the parent component.
+ * - resetForm: Function to reset the form inputs.
+ */
 
-import { useParams } from "next/navigation";
-import { useState } from "react";
-import promptUseCases, { PromptUseCase } from "@/constants/promptUseCases";
+import FormField from "./FormField";
+import { FaRedo } from "react-icons/fa";
 
-export default function PromptPage() {
-  const params = useParams();
-  const promptType: PromptUseCase | undefined = promptUseCases.find(
-    (p) => p.id === params?.slug
-  );
+interface SelectOption {
+  value: string;
+  label: string;
+}
 
-  const [formData, setFormData] = useState<Record<string, string>>({});
+interface PromptFormProps {
+  formElements: {
+    id: string;
+    name: string;
+    type: string;
+    options?: SelectOption[];
+  }[];
+  formData: Record<string, string>;
+  handleChange: (name: string, value: string) => void;
+  resetForm: () => void;
+}
 
-  //   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //     setFormData({ ...formData, [e.target.name]: e.target.value });
-  //   };
-
-  const generatePrompt = () => {
-    return promptType?.promptTemplate.replace(
-      /\{(\w+)\}/g,
-      (_, key) => formData[key] || `{${key}}`
-    );
-  };
-
-  const copyToClipboard = async () => {
-    const prompt = generatePrompt();
-    if (prompt) {
-      await navigator.clipboard.writeText(prompt);
-      alert("Prompt copied to clipboard!");
-    }
-  };
-
+export default function PromptForm({
+  formElements,
+  formData,
+  handleChange,
+  resetForm,
+}: PromptFormProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-gray-200 p-6">
-      <h1 className="text-4xl font-bold mb-6 capitalize">
-        {promptType ? `${promptType.headline}` : "Loading..."}
-      </h1>
-      <p className="text-lg text-gray-400 max-w-2xl text-center">
-        {promptType ? promptType.description : "Loading description..."}
-      </p>
+    <form className="w-full max-w-lg">
+      {formElements.map((element) => (
+        <FormField
+          key={element.id}
+          element={element}
+          value={formData[element.id] || ""}
+          handleChange={handleChange}
+        />
+      ))}
       <button
-        onClick={copyToClipboard}
-        className="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-        Copy Prompt to Clipboard
+        type="button"
+        onClick={resetForm}
+        className="mt-4 flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full">
+        <FaRedo className="mr-2" />
+        Reset Form
       </button>
-    </div>
+    </form>
   );
 }
