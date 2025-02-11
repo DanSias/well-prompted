@@ -17,9 +17,13 @@
 
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import CreatableSelect from "react-select/creatable";
+import {
+  getFromLocalStorage,
+  saveToLocalStorage,
+} from "@/utils/localStorageUtils";
 import {
   languageOptions,
   frameworkOptions,
@@ -31,13 +35,13 @@ import {
 } from "@/constants/settingsOptions";
 
 const defaultSettings = {
-  preferredProgrammingLanguage: "",
-  favoriteFramework: "",
-  preferredTestingFramework: "",
-  learningStyle: "",
-  errorResolutionApproach: "",
-  optimizationFocus: "",
-  automationTools: "",
+  programming_language: "",
+  framework_library: "",
+  testing_requirements: "",
+  preferred_learning_style: "",
+  error_message: "",
+  performance_goal: "",
+  task_to_automate: "",
 };
 
 interface UserSettingsProps {
@@ -47,13 +51,9 @@ interface UserSettingsProps {
 
 export default function UserSettings({ isOpen, onClose }: UserSettingsProps) {
   const [settings, setSettings] = useState(() => {
-    const savedSettings = localStorage.getItem("userSettings");
+    const savedSettings = getFromLocalStorage("userSettings");
     return savedSettings ? JSON.parse(savedSettings) : defaultSettings;
   });
-
-  useEffect(() => {
-    localStorage.setItem("userSettings", JSON.stringify(settings));
-  }, [settings]);
 
   const handleSelectChange = (
     selectedOption: { value: string; label: string } | null,
@@ -69,7 +69,7 @@ export default function UserSettings({ isOpen, onClose }: UserSettingsProps) {
   };
 
   const handleSave = () => {
-    localStorage.setItem("userSettings", JSON.stringify(settings));
+    saveToLocalStorage("userSettings", settings);
     console.log("Settings saved:", settings);
     onClose();
   };
