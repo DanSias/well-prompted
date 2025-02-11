@@ -1,5 +1,7 @@
 # Well Prompted
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Visit-blue)](https://wellprompted.danielsias.dev)
+
 **Well Prompted** is a developer-friendly tool designed to help developers craft precise, structured AI prompts for coding workflows. This project streamlines prompt creation, ensuring better results for tasks like code generation, debugging, optimization, and automation.
 
 ## Features
