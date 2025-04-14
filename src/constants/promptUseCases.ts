@@ -14,8 +14,13 @@ import {
   codeTypeOptions,
   languageOptions,
   frameworkOptions,
+  backendLanguageOptions,
+  ormOptions,
+  backendFrameworkOptions,
+  databaseOptions,
   testingFrameworkOptions,
   learningStyleOptions,
+  experienceLevelOptions,
   errorResolutionOptions,
   optimizationOptions,
   automationToolsOptions,
@@ -29,7 +34,7 @@ interface SelectOption {
 export interface FormElement {
   id: string;
   name: string;
-  type: "text" | "textarea";
+  type: "text" | "textarea" | "checkbox";
   description: string;
   sentence: string;
   options?: Array<SelectOption>;
@@ -49,7 +54,7 @@ export interface PromptUseCase {
 const promptUseCases: PromptUseCase[] = [
   {
     id: "code-generation",
-    headline: "Code Generation & Boilerplate Creation",
+    headline: "Code Generation & Boilerplate",
     description:
       "Generate structured AI prompts to quickly create reusable code snippets, components, or entire project boilerplates, reducing development time.",
     formElements: [
@@ -111,6 +116,136 @@ Instructions for the output:
 - **Consider alternative solutions** or optimizations to achieve the same result.
     `,
     defaultCodeType: "Function",
+  },
+  {
+    id: "api-endpoints",
+    headline: "API Endpoint Builder",
+    description:
+      "Generate complete REST API endpoints with validation, error handling, and database integration.",
+    formElements: [
+      {
+        id: "resource_name",
+        name: "Resource Name",
+        type: "text",
+        description:
+          "Enter the primary resource to build an API for (e.g., products, tasks). Use plural form.",
+        sentence: "Build endpoints for the {resource_name} resource",
+      },
+      {
+        id: "fields",
+        name: "Fields",
+        type: "textarea",
+        description:
+          "List the fields and types (e.g., name: string, price: number, categoryId: foreign key).",
+        sentence: "with the fields: {fields}",
+      },
+      {
+        id: "language",
+        name: "Programming Language",
+        type: "text",
+        description: "Choose the backend programming language.",
+        sentence: "using {language}",
+        options: backendLanguageOptions,
+      },
+      {
+        id: "framework",
+        name: "Framework",
+        type: "text",
+        description: "Select the backend framework to structure the API.",
+        sentence: "with the {framework} framework",
+        options: backendFrameworkOptions,
+      },
+      {
+        id: "database",
+        name: "Database / ORM",
+        type: "text",
+        description:
+          "Optionally specify a database or ORM layer (e.g., PostgreSQL, Prisma, Sequelize, or use mock DB).",
+        sentence: "and integrate with {database}",
+        options: databaseOptions,
+      },
+    ],
+    promptTemplate: `
+  Create a modular, production-ready REST API for the {resource_name} resource using {language} and {framework}.
+  The resource includes the following fields: {fields}. 
+  
+  Implement full CRUD operations, validation (e.g., required fields, foreign key checks), and proper error handling.
+  Organize the code using idiomatic folder structure (controllers, routes, models, utils).
+  Use {database} for data interaction, or mock storage if applicable. 
+  
+  Include TypeScript types, clean error responses (400, 404), and example request/response payloads.
+  Keep the code concise, readable, and easy to integrate into a full backend project.
+    `,
+    additionalGuidance: `
+  Recommendations:
+  - Ensure modular separation of concerns between controllers, routes, and models.
+  - Implement type-safe validation and consistent error handling (use 400 for validation issues, 404 for not found).
+  - Include a stubbed or real DB interaction layer as specified (e.g., mock DB or Prisma).
+  - Example inputs/outputs help developers understand request formats.
+  
+  Output Format:
+  - Provide complete, copy-paste-ready code snippets.
+  - Use clean, consistent syntax aligned with the selected language and framework.
+  - Include example HTTP request/response pairs where helpful.
+  `,
+    defaultCodeType: "REST API",
+  },
+  {
+    id: "database-models",
+    headline: "Database Schema Generator",
+    description:
+      "Design and generate SQL or NoSQL database schemas with field types, relations, and validations included.",
+    formElements: [
+      {
+        id: "resource_name",
+        name: "Resource Name",
+        type: "text",
+        description:
+          "Enter the main entity for this schema (e.g., products, users, tasks).",
+        sentence: "Create a model for the {resource_name} table",
+      },
+      {
+        id: "fields",
+        name: "Fields",
+        type: "textarea",
+        description:
+          "List fields and types (e.g., name: string, price: number, createdAt: timestamp).",
+        sentence: "with fields: {fields}",
+      },
+      {
+        id: "database_type",
+        name: "Database Type",
+        type: "text",
+        description:
+          "Choose the type of database system (e.g., PostgreSQL, MongoDB, SQLite).",
+        sentence: "using a {database_type} database",
+        options: databaseOptions,
+      },
+      {
+        id: "orm",
+        name: "ORM / Output Format",
+        type: "text",
+        description:
+          "Select a code output format like Prisma, Sequelize, or Mongoose.",
+        sentence: "and generate models for {orm}",
+        options: ormOptions,
+      },
+    ],
+    promptTemplate: `
+  Create a database schema for the {resource_name} resource using a {database_type} database.
+  It should include the following fields: {fields}. Format the output using the {orm} ORM syntax or model style.
+  Include primary keys, foreign keys if obvious, and use proper typing conventions.
+    `,
+    additionalGuidance: `
+  Recommendations:
+  - Use consistent field naming conventions and clear types.
+  - If ORM is Prisma or Sequelize, include relations and model decorators.
+  - Add sensible defaults for timestamps and ID fields.
+  Output Format:
+  - Provide complete model code in the chosen format.
+  - Highlight any assumptions made.
+    `,
+    defaultCodeType: "Database Model",
   },
   {
     id: "debugging",
@@ -222,48 +357,53 @@ Instructions for the output:
     id: "learning",
     headline: "Learning & Research",
     description:
-      "Develop prompts that help AI explain new technologies, frameworks, or concepts, aiding continuous learning and research in your field.",
+      "Stay current with the latest frameworks, tools, and best practices in development. Use AI to explore trends, summarize key concepts, and get personalized learning plans.",
     formElements: [
       {
-        id: "topic_of_interest",
-        name: "Topic of Interest",
-        type: "text",
-        description: "Specify the topic or technology you want to learn about.",
-        sentence: "Explain {topic_of_interest}",
-      },
-      {
-        id: "current_knowledge_level",
-        name: "Current Knowledge Level",
-        type: "text",
-        description: "Indicate your current knowledge or experience level.",
-        sentence:
-          "I have {current_knowledge_level} knowledge about this topic.",
-      },
-      {
-        id: "preferred_learning_style",
-        name: "Preferred Learning Style",
+        id: "topic",
+        name: "Technology or Concept",
         type: "text",
         description:
-          "Describe how you prefer to learn (e.g., examples, theory).",
-        sentence: "Prefer learning through {preferred_learning_style}",
+          "What do you want to learn more about? (e.g., Next.js 14, tRPC, EdgeDB)",
+        sentence: "Help me learn about {topic}",
+      },
+      {
+        id: "experience_level",
+        name: "Your Experience Level",
+        type: "text",
+        description:
+          "Helps tailor the explanation (e.g., beginner, mid-level, expert).",
+        sentence: "I'm currently a {experience_level} developer",
+        options: experienceLevelOptions,
+      },
+      {
+        id: "learning_goal",
+        name: "Learning Goal",
+        type: "text",
+        description:
+          "Why do you want to learn this? (e.g., interview prep, build a side project, stay up to date)",
+        sentence: "and I want to learn this for {learning_goal}",
         options: learningStyleOptions,
       },
     ],
-    promptTemplate:
-      "{topic_of_interest} {current_knowledge_level} {preferred_learning_style}",
+    promptTemplate: `
+  I’m a {experience_level} developer, and I want to learn about {topic} for {learning_goal}.
+  Please explain the core concepts, list the most important features or updates, and recommend a short learning plan.
+  If it's a new framework, include real-world use cases and comparisons to prior solutions.
+  `,
     additionalGuidance: `
-Consider:
-1. Tailor explanations to your **{current_knowledge_level}** and **{preferred_learning_style}**.
-2. Break down complex concepts into **simpler components** or analogies when possible.
-3. Provide **real-world examples** or practical applications of **{topic_of_interest}**.
-4. Highlight **common pitfalls** or misconceptions related to **{topic_of_interest}**.
-
-Instructions for the output:
-- Structure the explanation clearly with **headings** and **bullet points** for easy comprehension.
-- Minimize unnecessary technical jargon unless explicitly required.
-- Provide concise, focused explanations, and avoid overwhelming with excessive detail unless requested.
-- If applicable, suggest **further resources** (e.g., documentation, tutorials) for deeper learning.
-      `,
+  Recommendations:
+  - Include links or mention well-known resources (e.g., docs, GitHub repos, blogs).
+  - Provide a timeline if possible (e.g., 1-week plan).
+  - Keep it concise and geared toward practical application.
+  
+  Output Format:
+  - Section 1: Summary of what it is
+  - Section 2: Key features and use cases
+  - Section 3: How it compares to alternatives
+  - Section 4: Suggested resources and next steps
+  `,
+    defaultCodeType: "Learning Summary",
   },
   {
     id: "testing",
@@ -379,6 +519,54 @@ Instructions for the output:
 - If multiple solutions are possible, suggest the most efficient one.
 - Ensure the output is **easy to copy and paste** into a pipeline configuration file.
 `,
+  },
+  {
+    id: "documentation-assistant",
+    headline: "Documentation Assistant",
+    description:
+      "Create or refine internal docs, API guides, and usage examples with natural language clarity and accuracy.",
+    formElements: [
+      {
+        id: "doc_type",
+        name: "Documentation Type",
+        type: "text",
+        description:
+          "Choose the documentation type (e.g., API reference, README, inline comments).",
+        sentence: "Create {doc_type} documentation",
+      },
+      {
+        id: "input_code",
+        name: "Code or Context",
+        type: "textarea",
+        description: "Paste the code or description you'd like documented.",
+        sentence: "based on the following:\n{input_code}",
+      },
+      {
+        id: "tone",
+        name: "Tone or Audience",
+        type: "text",
+        description:
+          "Specify the tone or target audience (e.g., beginner-friendly, technical team).",
+        sentence: "with a tone suitable for {tone}",
+      },
+    ],
+    promptTemplate: `
+  Write {doc_type} documentation based on the following code or content:
+  {input_code}
+  
+  Make it clear, concise, and informative. Tailor it to an audience that expects {tone}.
+  Use best practices in formatting and structure.
+    `,
+    additionalGuidance: `
+  Recommendations:
+  - Write in natural, readable language — avoid over-explaining.
+  - Use bullet points and headings for clarity.
+  - Include code examples or expected outputs where appropriate.
+  Output Format:
+  - Markdown or plain text format.
+  - Structure with consistent heading levels.
+    `,
+    defaultCodeType: "Documentation",
   },
 ];
 
