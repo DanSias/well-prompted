@@ -88,7 +88,7 @@ export default function PromptPage() {
         {promptType ? promptType.description : "Loading description..."}
       </p>
       {promptType && (
-        <div className="mt-6 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="mt-6 w-full max-w-5xl">
           <PromptForm
             formElements={promptType.formElements}
             formData={formData}
