@@ -55,7 +55,7 @@ export default function PromptForm({
       <button
         type="button"
         onClick={resetForm}
-        className="mt-4 flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full">
+        className="mt-6 flex items-center border border-red-500 text-red-500 hover:bg-red-50 dark:hover:bg-red-900 font-medium py-2 px-4 rounded w-full">
         <FaRedo className="mr-2" />
         Reset Form
       </button>
