@@ -25,13 +25,13 @@ interface PromptOutputProps {
 export default function PromptOutput({ customPrompt }: PromptOutputProps) {
   return (
     <div className="p-4 text-gray-200 rounded-md w-full max-w-lg">
-      <h3 className="text-lg font-semibold mb-2">Generated Prompt:</h3>
+      {/* <h3 className="text-lg font-semibold mb-2">Generated Prompt:</h3>
       <textarea
         value={customPrompt}
         onChange={() => {}}
         className="w-full p-2 bg-gray-700 text-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 h-80"
         readOnly
-      />
+      /> */}
       <button
         onClick={() => copyToClipboard(customPrompt)}
         className="mt-4 flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full">
