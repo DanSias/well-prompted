@@ -13,6 +13,7 @@
  * Structure:
  * - Each object includes:
  *    - name: Display name in the navigation.
+ *    - slug: Unique identifier used in dynamic routing.
  *    - path: URL path for routing.
  *    - icon: Icon to visually represent the prompt type.
  *    - description: Brief overview of what the prompt type does.
@@ -25,61 +26,101 @@ import {
   FaGraduationCap,
   FaRobot,
   FaCogs,
+  FaDatabase,
+  FaBook,
 } from "react-icons/fa";
-import { IconType } from "react-icons";
 import { HiOutlineSparkles } from "react-icons/hi";
+import { FiServer } from "react-icons/fi";
+import { IconType } from "react-icons";
 
-export interface promptType {
+export interface PromptType {
   name: string;
+  slug: string;
   path: string;
   icon: IconType;
-  description?: string;
+  description: string;
 }
 
-const promptTypes: promptType[] = [
+const promptTypes: PromptType[] = [
   {
     name: "Code Generation",
+    slug: "code-generation",
     path: "/prompts/code-generation",
     icon: FaCode,
-    description: "Generate reusable code snippets and boilerplate code.",
+    description:
+      "Generate reusable code snippets, templates, and boilerplate tailored to your project and tech stack.",
+  },
+  {
+    name: "Database Models",
+    slug: "database-models",
+    path: "/prompts/database-models",
+    icon: FaDatabase,
+    description:
+      "Design and generate SQL or NoSQL database schemas with field types, relations, and validations included.",
+  },
+  {
+    name: "API Endpoints",
+    slug: "api-endpoints",
+    path: "/prompts/api-endpoints",
+    icon: FiServer,
+    description:
+      "Generate complete REST API endpoints with validation, error handling, and database integration.",
   },
   {
     name: "Debugging & Errors",
+    slug: "debugging",
     path: "/prompts/debugging",
     icon: FaBug,
-    description: "Identify and fix errors in your code.",
+    description:
+      "Diagnose bugs and fix runtime or logical issues using smart, context-aware AI suggestions.",
   },
   {
     name: "Code Refactoring",
+    slug: "refactoring",
     path: "/prompts/refactoring",
     icon: FaTools,
     description:
-      "Improve the structure of existing code without changing its behavior.",
+      "Optimize and reorganize your code for clarity, performance, and maintainability without changing functionality.",
   },
   {
-    name: "Learning & Research",
-    path: "/prompts/learning",
-    icon: FaGraduationCap,
-    description: "Learn new technologies, frameworks, and concepts.",
-  },
-  {
-    name: "Testing",
+    name: "Automated Testing",
+    slug: "testing",
     path: "/prompts/testing",
     icon: FaRobot,
-    description: "Generate comprehensive test cases for your code.",
+    description:
+      "Generate unit, integration, and end-to-end tests based on your code and functionality requirements.",
   },
   {
     name: "CI/CD Automation",
+    slug: "ci-cd-automation",
     path: "/prompts/ci-cd-automation",
     icon: FaCogs,
     description:
-      "Automate build, test, and deployment workflows using CI/CD tools.",
+      "Automate build, test, and deployment workflows using modern CI/CD tools and best practices.",
+  },
+  {
+    name: "Documentation Assistant",
+    slug: "documentation-assistant",
+    path: "/prompts/documentation-assistant",
+    icon: FaBook,
+    description:
+      "Create or refine internal docs, API guides, and usage examples with natural language clarity and accuracy.",
+  },
+  {
+    name: "Learning & Research",
+    slug: "learning",
+    path: "/prompts/learning",
+    icon: FaGraduationCap,
+    description:
+      "Explore new libraries, frameworks, or languages and get tailored explanations or code examples.",
   },
   {
     name: "Prompt Enhancements",
+    slug: "enhancements",
     path: "/prompts/enhancements",
     icon: HiOutlineSparkles,
-    description: "Improve LLM-generated prompts for better results.",
+    description:
+      "Improve the clarity, structure, and effectiveness of your AI prompts to get better results every time.",
   },
 ];
 
